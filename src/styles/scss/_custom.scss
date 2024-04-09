@@ -1,0 +1,20 @@
+.layout-container {
+  height: calc(100vh - 200px);
+}
+
+.login-form,
+.register-form {
+  width: 100%;
+  width: min(100%, 420px);
+  margin: 0 auto;
+  padding: 25px 0;
+}
+
+.rounded-btn {
+  display: inline-block;
+  padding: 0.5rem 1rem;
+  border-radius: 1rem;
+  background-color: #191b1d;
+  color: #ffffff;
+  text-decoration: none;
+}
