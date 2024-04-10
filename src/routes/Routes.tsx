@@ -19,7 +19,6 @@ const Home = lazy(() => import('pages/Home'))
 
 /* Private routes */
 const Auctionbay = lazy(() => import('pages/Auctions'))
-const ProfileSettingsPage = lazy(() => import('pages/Users/ProfileSettingsPage'))
 
 /* Restricted routes */
 const Login = lazy(() => import('pages/Login'))
@@ -46,11 +45,6 @@ export const AppRoutes: AppRoute[] = [
     type: RouteType.PRIVATE,
     path: '/auctions',
     children: <Auctionbay />,
-  },
-  {
-    type: RouteType.PRIVATE,
-    path: '/users/edit',
-    children: <ProfileSettingsPage />,
   },
   // Public Routes
   {

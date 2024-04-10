@@ -31,7 +31,7 @@
   font-weight: 500;
 }
 .bright-yellow:hover {
-  background-color: #F4FF47; 
+  background-color: #D0DB33; 
   color: #000000;
   text-decoration: none;
 }
@@ -45,6 +45,36 @@
   display: block;
   padding: 0.5rem 1rem; 
   text-align: center;
+}
+
+.white-no-border{
+  background-color: #ffffff; 
+  color: #000000;
+  font-weight: 500;
+  text-align: center;
+  display: block;
+  padding: 0.5rem 1rem; 
+  width: 80%;
+}
+
+.light-gray{
+  background-color: #EDF4F2;
+  color: #000000;
+  font-weight: 500;
+}
+
+.light-gray:hover{
+  background-color: #DDE9E6;
+  color: #000000;
+  font-weight: 500;
+}
+
+.link{
+  color: #000000;
+  text-decoration: none;
+}
+.link:hover{
+  color: #000000;
 }
 
 .form-rounded {
