@@ -1,17 +1,25 @@
 import { routes } from 'constants/routesConstants'
 import { FC, useState } from 'react'
 import ToastContainer from 'react-bootstrap/ToastContainer'
-import Button from 'react-bootstrap/Button'
 import { Link, NavLink, useNavigate } from 'react-router-dom'
 import authStore from 'stores/auth.store'
 import Toast from 'react-bootstrap/Toast'
 import { StatusCode } from 'constants/errorConstants'
 import * as API from 'api/Api'
+import Dropdown from 'react-bootstrap/Dropdown'
+import { Button, Modal } from 'react-bootstrap'
+import UpdateUserForm from 'components/user/UpdateUserForm'
+import { useLocation } from 'react-router-dom'
 
 const Navbar: FC = () => {
   const navigate = useNavigate()
   const [apiError, setApiError] = useState('')
   const [showError, setShowError] = useState(false)
+  const [showModal, setShowModal] = useState(false)
+
+  const handleCloseModal = () => setShowModal(false)
+  const location = useLocation()
+
 
   const singout = async () => {
     const response = await API.signout()
@@ -53,11 +61,30 @@ const Navbar: FC = () => {
             >
               <ul className="navbar-nav mb-2 pe-3 mb-lg-0">
                 {authStore.user ? (
-                  <li className="nav-item pe-4">
-                    <Button className="btn btn-dark" onClick={singout}>
-                      Signout
-                    </Button>
-                  </li>
+                  <>
+                    <li className="nav-item">
+                      <Dropdown>
+                        <Dropdown.Toggle variant="dark" id="dropdown-avatar">
+                          {authStore.user?.email}
+                        </Dropdown.Toggle>
+                        <Dropdown.Menu >
+
+                          <Dropdown.Item> <Link
+                            to={`${routes.USERS}/edit`}
+                            state={{
+                              id: authStore.user.id,
+                              first_name: authStore.user.first_name,
+                              last_name: authStore.user.last_name,
+                              email: authStore.user.email,
+                            }}
+                          >
+                            Profile settings
+                          </Link></Dropdown.Item>
+                          <Dropdown.Item className='rounded-btn white-btn m-3' onClick={singout}>Logout</Dropdown.Item>
+                        </Dropdown.Menu>
+                      </Dropdown>
+                    </li>
+                  </>
                 ) : (
                   <>
                     <li className="nav-item">
@@ -80,6 +107,21 @@ const Navbar: FC = () => {
           </div>
         </nav>
       </header>
+
+      {/*  <Modal show={showModal} onHide={handleCloseModal}>
+        <Modal.Header closeButton>
+          <Modal.Title>Profile settings</Modal.Title>
+        </Modal.Header>
+        <Modal.Body>
+
+          <UpdateUserForm defaultValues={location.state} />
+        </Modal.Body>
+        <Modal.Footer>
+          <Button variant="secondary rounded-btn" onClick={handleCloseModal}>Close</Button>
+          <Button variant="primary rounded-btn bright-yellow">Save changes</Button>
+        </Modal.Footer>
+      </Modal> */}
+
       {showError && (
         <ToastContainer className="p-3" position="top-end">
           <Toast onClose={() => setShowError(false)} show={showError}>

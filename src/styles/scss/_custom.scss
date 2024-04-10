@@ -19,13 +19,39 @@
   text-decoration: none;
   border: none;
 }
+.rounded-btn:hover {
+  background-color: #191b1d; 
+  color: #ffffff;
+  text-decoration: none;
+}
 
 .bright-yellow {
   background-color: #F4FF47; 
   color: #000000;
   font-weight: 500;
 }
+.bright-yellow:hover {
+  background-color: #F4FF47; 
+  color: #000000;
+  text-decoration: none;
+}
+
+.white-btn {
+  background-color: #ffffff; 
+  color: #000000;
+  font-weight: 500;
+  border: 1px solid #000000;
+  width: 80%;
+  display: block;
+  padding: 0.5rem 1rem; 
+  text-align: center;
+}
 
 .form-rounded {
   border-radius: 1rem;
+  }
+
+  .avatar-small {
+    width: 15px;
+    height: 15px;
   }
