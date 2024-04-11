@@ -37,7 +37,6 @@ export const useUpdateUserForm = ({ defaultValues }: Props) => {
             email: '',
             password: '',
             confirm_password: '',
-            role_id: '',
             ...defaultValues,
         },
         mode: 'onSubmit',

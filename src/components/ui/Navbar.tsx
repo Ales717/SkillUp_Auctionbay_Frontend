@@ -7,7 +7,7 @@ import Toast from 'react-bootstrap/Toast'
 import { StatusCode } from 'constants/errorConstants'
 import * as API from 'api/Api'
 import Dropdown from 'react-bootstrap/Dropdown'
-import { Button, Modal } from 'react-bootstrap'
+import { Modal } from 'react-bootstrap'
 import UpdateUserForm from 'components/user/UpdateUserForm'
 
 const Navbar: FC = () => {
@@ -44,7 +44,7 @@ const Navbar: FC = () => {
       <header>
         <nav className="navbar navbar-expand-lg bg-white">
           <div className="container-xxl p-2 pb-0">
-            <Link className="navbar-brand mt-0" to={routes.HOME}>
+            <Link className="navbar-brand mt-0" to={authStore.user ? (routes.AUCTIONS) : (routes.HOME)}>
               <img src="/images/logo.png" alt="auctionbay" width={90} />
             </Link>
             <button
@@ -107,7 +107,7 @@ const Navbar: FC = () => {
         </nav>
       </header>
 
-      <Modal show={showModal} onHide={handleCloseModal}>
+      <Modal show={showModal} onHide={handleCloseModal} centered>
         <Modal.Body>
           <UpdateUserForm defaultValues={authStore.user} onCloseModal={handleCloseModal} />
         </Modal.Body>

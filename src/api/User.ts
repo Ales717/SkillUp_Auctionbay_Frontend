@@ -4,6 +4,7 @@ import { UserType } from 'models/auth'
 import { LoginUserFields } from 'hooks/react-hook-form/useLogin'
 import { RegisterUserFields } from 'hooks/react-hook-form/useRegister'
 import { UpdateUserFields } from 'hooks/react-hook-form/useUpdateUser'
+import { UpdateUserPassword } from 'hooks/react-hook-form/useUpdatePassword'
 
 export const fetchUser = async () =>
   apiRequest<undefined, UserType>('get', apiRoutes.FETCH_USER)
@@ -30,6 +31,14 @@ export const updateUser = async (data: UpdateUserFields, id: string) =>
     `${apiRoutes.USERS_PREFIX}/${id}`,
     data,
   )
+
+export const upadtePassword = async (data: UpdateUserPassword, id: string) =>
+  apiRequest<UpdateUserPassword, void>(
+    'patch',
+    `${apiRoutes.USERS_PREFIX}/password/${id}`,
+    data,
+  )
+
 
 export const deleteUser = async (id: string) =>
   apiRequest<string, UserType>('delete', `${apiRoutes.USERS_PREFIX}/${id}`)
