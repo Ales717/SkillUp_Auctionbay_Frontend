@@ -4,4 +4,4 @@ export type UserType = {
   last_name: string
   email: string
   avatar?: string
-}
+} | null

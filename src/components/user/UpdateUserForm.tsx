@@ -5,20 +5,21 @@ import { Controller } from 'react-hook-form'
 import FormLabel from 'react-bootstrap/FormLabel'
 import Button from 'react-bootstrap/Button'
 import { UserType } from 'models/auth'
-import { useNavigate } from 'react-router-dom'
+import { Link, useNavigate } from 'react-router-dom'
 import { UpdateUserFields, useUpdateUserForm } from 'hooks/react-hook-form/useUpdateUser'
 import { observer } from 'mobx-react'
 import { FC, useState } from 'react'
 import * as API from 'api/Api'
 import { StatusCode } from 'constants/errorConstants'
 import { routes } from 'constants/routesConstants'
-import { Modal } from 'react-bootstrap'
+import authStore from 'stores/auth.store'
 
 interface Props {
     defaultValues?: UserType
+    onCloseModal: () => void
 }
 
-const UpdateUserForm: FC<Props> = ({ defaultValues }) => {
+const UpdateUserForm: FC<Props> = ({ defaultValues, onCloseModal }) => {
     const [apiError, setApiError] = useState('')
     const [showError, setShowError] = useState(false)
     const navigate = useNavigate()
@@ -26,10 +27,8 @@ const UpdateUserForm: FC<Props> = ({ defaultValues }) => {
         defaultValues,
     })
 
-    const [showModal, setShowModal] = useState(true)
     const handleCloseModal = () => {
-        setShowModal(false)
-        navigate(-1)
+        onCloseModal()
     }
 
     const onSubmit = handleSubmit(async (data: UpdateUserFields) => {
@@ -38,111 +37,105 @@ const UpdateUserForm: FC<Props> = ({ defaultValues }) => {
             setApiError(response.data.message)
             setShowError(true)
         } else {
-            navigate(`${routes.AUCTIONS}`)
+            authStore.login(response.data)
+            navigate(routes.AUCTIONS)
+            onCloseModal()
         }
     })
 
     return (
         <>
-            <Modal show={showModal} onHide={handleCloseModal}>
-                <Modal.Header closeButton>
-                    <Modal.Title>Profile settings</Modal.Title>
-                </Modal.Header>
-                <Modal.Body>
-                    <Form className="login-form" onSubmit={onSubmit}>
-                        <div className="row">
-                            <div className="col">
-                                <Controller
-                                    control={control}
-                                    name="first_name"
-                                    render={({ field }) => (
-                                        <Form.Group className="mb-3">
-                                            <FormLabel htmlFor="first_name">First name</FormLabel>
-                                            <input
-                                                {...field}
-                                                type="text"
-                                                aria-label="First name"
-                                                aria-describedby="first_name"
-                                                className={
-                                                    errors.first_name ? 'form-control is-invalid form-rounded' : 'form-control form-rounded'
-                                                }
-                                            />
-                                            {errors.first_name && (
-                                                <div className="invalid-feedback text-danger">
-                                                    {errors.first_name.message}
-                                                </div>
-                                            )}
-                                        </Form.Group>
-                                    )}
-                                />
-                            </div>
-                            <div className="col">
-                                <Controller
-                                    control={control}
-                                    name="last_name"
-                                    render={({ field }) => (
-                                        <Form.Group className="mb-3">
-                                            <FormLabel htmlFor="last_name">Last name</FormLabel>
-                                            <input
-                                                {...field}
-                                                type="text"
-                                                aria-label="Last name"
-                                                aria-describedby="last_name"
-                                                className={
-                                                    errors.last_name ? 'form-control is-invalid form-rounded' : 'form-control form-rounded'
-                                                }
-                                            />
-                                            {errors.last_name && (
-                                                <div className="invalid-feedback text-danger">
-                                                    {errors.last_name.message}
-                                                </div>
-                                            )}
-                                        </Form.Group>
-                                    )}
-                                />
-                            </div>
-                        </div>
-
+            <h4 className='fw-bold'>Profile settings</h4>
+            <Form className='mt-4' onSubmit={onSubmit}>
+                <div className="row">
+                    <div className="col">
                         <Controller
                             control={control}
-                            name="email"
+                            name="first_name"
                             render={({ field }) => (
                                 <Form.Group className="mb-3">
-                                    <FormLabel htmlFor="email">E-mail</FormLabel>
+                                    <FormLabel htmlFor="first_name">First name</FormLabel>
                                     <input
                                         {...field}
-                                        type="email"
-                                        placeholder="example@gmail.com"
-                                        aria-label="Email"
-                                        aria-describedby="email"
+                                        type="text"
+                                        aria-label="First name"
+                                        aria-describedby="first_name"
                                         className={
-                                            errors.email ? 'form-control is-invalid form-rounded' : 'form-control form-rounded'
+                                            errors.first_name ? 'form-control is-invalid form-rounded' : 'form-control form-rounded'
                                         }
                                     />
-                                    {errors.email && (
+                                    {errors.first_name && (
                                         <div className="invalid-feedback text-danger">
-                                            {errors.email.message}
+                                            {errors.first_name.message}
                                         </div>
                                     )}
                                 </Form.Group>
                             )}
                         />
+                    </div>
+                    <div className="col">
+                        <Controller
+                            control={control}
+                            name="last_name"
+                            render={({ field }) => (
+                                <Form.Group className="mb-3">
+                                    <FormLabel htmlFor="last_name">Last name</FormLabel>
+                                    <input
+                                        {...field}
+                                        type="text"
+                                        aria-label="Last name"
+                                        aria-describedby="last_name"
+                                        className={
+                                            errors.last_name ? 'form-control is-invalid form-rounded' : 'form-control form-rounded'
+                                        }
+                                    />
+                                    {errors.last_name && (
+                                        <div className="invalid-feedback text-danger">
+                                            {errors.last_name.message}
+                                        </div>
+                                    )}
+                                </Form.Group>
+                            )}
+                        />
+                    </div>
+                </div>
 
-                        <Button className="w-100 rounded-btn bright-yellow" type="submit">
-                            Save
-                        </Button>
-                    </Form>
+                <Controller
+                    control={control}
+                    name="email"
+                    render={({ field }) => (
+                        <Form.Group className="mb-3">
+                            <FormLabel htmlFor="email">E-mail</FormLabel>
+                            <input
+                                {...field}
+                                type="email"
+                                placeholder="example@gmail.com"
+                                aria-label="Email"
+                                aria-describedby="email"
+                                className={
+                                    errors.email ? 'form-control is-invalid form-rounded' : 'form-control form-rounded'
+                                }
+                            />
+                            {errors.email && (
+                                <div className="invalid-feedback text-danger">
+                                    {errors.email.message}
+                                </div>
+                            )}
+                        </Form.Group>
+                    )}
+                />
+                <div className='mb-2'>
+                    <Link className='link' to={'/'}>Change password</Link>
+                </div>
+                <div className='mb-4'>
+                    <Link className='link' to={'/'}>Change profile picture</Link>
+                </div>
+                <div className='d-flex justify-content-end'>
+                    <Button className="rounded-btn light-gray me-2" onClick={handleCloseModal}>Cancel</Button>
+                    <Button className="rounded-btn bright-yellow" type="submit"> Save changes </Button>
+                </div>
 
-                </Modal.Body>
-                <Modal.Footer>
-                    <Button variant="secondary" onClick={handleCloseModal}>Close</Button>
-                    <Button variant="primary">Save changes</Button>
-                </Modal.Footer>
-            </Modal>
-
-
-
-
+            </Form>
 
             {showError && (
                 <ToastContainer className="p-3" position="top-end">
