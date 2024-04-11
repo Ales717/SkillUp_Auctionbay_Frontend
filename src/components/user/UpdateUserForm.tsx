@@ -8,13 +8,14 @@ import { UserType } from 'models/auth'
 import { Link, useNavigate } from 'react-router-dom'
 import { UpdateUserFields, useUpdateUserForm } from 'hooks/react-hook-form/useUpdateUser'
 import { observer } from 'mobx-react'
-import { FC, useState } from 'react'
+import { ChangeEvent, FC, useEffect, useState } from 'react'
 import * as API from 'api/Api'
 import { StatusCode } from 'constants/errorConstants'
 import { routes } from 'constants/routesConstants'
 import authStore from 'stores/auth.store'
 import { BsEye, BsEyeSlash } from 'react-icons/bs'
 import { UpdateUserPassword, useUpdatePasswordForm } from 'hooks/react-hook-form/useUpdatePassword'
+import Avatar from 'react-avatar'
 
 
 interface Props {
@@ -35,22 +36,15 @@ const UpdateUserForm: FC<Props> = ({ defaultValues, onCloseModal }) => {
     const navigate = useNavigate()
     const [showPassword, setShowPassword] = useState(false)
     const [showConfirmPassword, setShowConfirmPassword] = useState(false)
-    const { handleSubmit: handleSubmitPassword, errors: errorsPassword, control: controlPassword } = useUpdatePasswordForm()
 
-    const onSubmitPassword = handleSubmitPassword(async (data: UpdateUserPassword) => {
-        const response = await API.upadtePassword(data, defaultValues?.id as string)
-        if (response.data?.statusCode === StatusCode.BAD_REQUEST || response.data?.statusCode === StatusCode.INTERNAL_SERVER_ERROR) {
-            setApiError(response.data.message)
-            setShowError(true)
-        } else {
-            onCloseModal()
-        }
-    })
-
+    const [file, setFile] = useState<File | null>(null)
+    const [preview, setPreview] = useState<string | null>(null)
+    const [fileError, setFileError] = useState(false)
 
     const togglePasswordVisibility = () => {
         setShowPassword(prevState => !prevState)
     }
+
     const toggleConfirmPasswordVisibility = () => {
         setShowConfirmPassword(prevState => !prevState)
     }
@@ -58,6 +52,10 @@ const UpdateUserForm: FC<Props> = ({ defaultValues, onCloseModal }) => {
     const { handleSubmit, errors, control } = useUpdateUserForm({
         defaultValues,
     })
+
+    const handleCloseModal = () => {
+        onCloseModal()
+    }
 
     const onSubmit = handleSubmit(async (data: UpdateUserFields) => {
         const response = await API.updateUser(data, defaultValues?.id as string)
@@ -71,18 +69,66 @@ const UpdateUserForm: FC<Props> = ({ defaultValues, onCloseModal }) => {
         }
     })
 
-    const handleCloseModal = () => {
-        onCloseModal()
+    const onSubmitImage = handleSubmit(async () => {
+        if (!file) return
+        const formData = new FormData()
+        formData.append('avatar', file, file.name)
+        const fileResponse = await API.uploadAvatar(formData, defaultValues?.id as string)
+        if (fileResponse.data?.statusCode === StatusCode.BAD_REQUEST) {
+            setApiError(fileResponse.data.message)
+            setShowError(true)
+        } else if (
+            fileResponse.data?.statusCode === StatusCode.INTERNAL_SERVER_ERROR
+        ) {
+            setApiError(fileResponse.data.message)
+            setShowError(true)
+        } else {
+            const response = await API.getUser(defaultValues?.id as string)
+            authStore.login(response.data)
+            onCloseModal()
+        }
+
+    })
+
+
+
+    const { handleSubmit: handleSubmitPassword, errors: errorsPassword, control: controlPassword } = useUpdatePasswordForm()
+
+    const onSubmitPassword = handleSubmitPassword(async (data: UpdateUserPassword) => {
+        const response = await API.upadtePassword(data, defaultValues?.id as string)
+        if (response.data?.statusCode === StatusCode.BAD_REQUEST || response.data?.statusCode === StatusCode.INTERNAL_SERVER_ERROR) {
+            setApiError(response.data.message)
+            setShowError(true)
+        } else {
+            onCloseModal()
+        }
+    })
+
+    const handleFileChange = ({ target }: ChangeEvent<HTMLInputElement>) => {
+        if (target.files) {
+            const myfile = target.files[0]
+            setFile(myfile)
+        }
     }
 
+    useEffect(() => {
+        if (file) {
+            const reader = new FileReader()
+            reader.onloadend = () => {
+                setPreview(reader.result as string)
+                setFileError(false)
+            }
+            reader.readAsDataURL(file)
+        } else {
+            setPreview(null)
+        }
+    }, [file])
 
     return (
         <>
-            <h4 className='fw-bold'>Profile settings</h4>
-
-
             {formSection === FormSection.Profile && (
                 <>
+                    <h4 className='fw-bold'>Profile settings</h4>
                     <Form className='mt-4' onSubmit={onSubmit}>
                         <div className="row">
                             <div className="col">
@@ -179,6 +225,7 @@ const UpdateUserForm: FC<Props> = ({ defaultValues, onCloseModal }) => {
 
             {formSection === FormSection.ChangePassword && (
                 <>
+                    <h4 className='fw-bold'>Change password</h4>
                     <Form className='mt-4' onSubmit={onSubmitPassword}>
                         <Controller
                             control={controlPassword}
@@ -289,12 +336,56 @@ const UpdateUserForm: FC<Props> = ({ defaultValues, onCloseModal }) => {
                 </>
             )
             }
-            {
-                formSection === FormSection.ChangePicture && (
-                    <>
-                        <div>Pic</div>
-                    </>
-                )
+            {formSection === FormSection.ChangePicture && (
+                <>
+                    <h4 className='fw-bold'>Change profile picture</h4>
+                    <Form className='mt-4' onSubmit={onSubmitImage}>
+                        <Form.Group className="d-flex flex-column justify-content-center align-items-center">
+                            <FormLabel htmlFor="avatar" id="avatar-p">
+                                <div className="d-flex justify-content-center align-items-center avatar-small mt-2">
+                                    <Avatar
+                                        round
+                                        src={
+                                            preview
+                                                ? preview
+                                                : defaultValues && defaultValues.avatar
+                                                    ? `${process.env.REACT_APP_API_URL}/files/${defaultValues.avatar}`
+                                                    : 'fallback_image_url_here'
+                                        }
+                                        alt="Avatar"
+                                        className='w-100 h-100'
+                                    />
+                                </div>
+                            </FormLabel>
+
+                            <div className='d-flex justify-content-center'>
+                                <input
+                                    onChange={handleFileChange}
+                                    id="avatar"
+                                    name="avatar"
+                                    type="file"
+                                    className="form-control d-none"
+                                    aria-label="Avatar"
+                                    aria-describedby="avatar"
+                                />
+                                <label htmlFor="avatar" className='rounded-btn white-btn ms-4 me-4 mt-1 text-center' style={{ cursor: 'pointer', whiteSpace: 'nowrap' }}>
+                                    Upload new picture
+                                </label>
+                            </div>
+                            {fileError && (
+                                <div className="d-block invalid-feedback text-danger mb-2 text-center">
+                                    Field avatar is required
+                                </div>
+                            )}
+                        </Form.Group>
+
+                        <div className='d-flex justify-content-end mt-3'>
+                            <Button className="rounded-btn light-gray me-2" onClick={handleCloseModal}>Cancel</Button>
+                            <Button className="rounded-btn bright-yellow" type="submit"> Save pass </Button>
+                        </div>
+                    </Form>
+                </>
+            )
             }
 
 

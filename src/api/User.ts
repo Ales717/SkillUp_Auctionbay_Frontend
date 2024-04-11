@@ -9,6 +9,9 @@ import { UpdateUserPassword } from 'hooks/react-hook-form/useUpdatePassword'
 export const fetchUser = async () =>
   apiRequest<undefined, UserType>('get', apiRoutes.FETCH_USER)
 
+export const getUser = async (id: string) =>
+  apiRequest<undefined, UserType>('get', `${apiRoutes.USERS_PREFIX}/${id}`)
+
 export const signout = async () =>
   apiRequest<undefined, void>('post', apiRoutes.SIGNOUT)
 

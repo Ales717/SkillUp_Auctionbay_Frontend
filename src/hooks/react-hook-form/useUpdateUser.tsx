@@ -7,8 +7,6 @@ export interface UpdateUserFields {
     first_name?: string
     last_name?: string
     email: string
-    password?: string
-    confirm_password?: string
 }
 
 interface Props {
@@ -20,10 +18,6 @@ export const useUpdateUserForm = ({ defaultValues }: Props) => {
         first_name: Yup.string().notRequired(),
         last_name: Yup.string().notRequired(),
         email: Yup.string().email().required('Please enter a valid email'),
-        password: Yup.string().notRequired(),
-        confirm_password: Yup.string()
-            .oneOf([Yup.ref('password'), null], 'Passwords do not match')
-            .notRequired(),
     })
 
     const {
@@ -35,8 +29,6 @@ export const useUpdateUserForm = ({ defaultValues }: Props) => {
             first_name: '',
             last_name: '',
             email: '',
-            password: '',
-            confirm_password: '',
             ...defaultValues,
         },
         mode: 'onSubmit',
