@@ -7,8 +7,9 @@ import Toast from 'react-bootstrap/Toast'
 import { StatusCode } from 'constants/errorConstants'
 import * as API from 'api/Api'
 import Dropdown from 'react-bootstrap/Dropdown'
-import { Button, Modal } from 'react-bootstrap'
+import { Modal } from 'react-bootstrap'
 import UpdateUserForm from 'components/user/UpdateUserForm'
+import Avatar from 'react-avatar'
 
 const Navbar: FC = () => {
   const navigate = useNavigate()
@@ -42,10 +43,10 @@ const Navbar: FC = () => {
   return (
     <>
       <header>
-        <nav className="navbar navbar-expand-lg bg-white">
+        <nav className="navbar navbar-expand-lg header pt-1">
           <div className="container-xxl p-2 pb-0">
-            <Link className="navbar-brand mt-0" to={routes.HOME}>
-              <img src="/images/logo.png" alt="auctionbay" width={90} />
+            <Link className="navbar-brand " to={authStore.user ? (routes.AUCTIONS) : (routes.HOME)}>
+              <img src="/images/logo.png" alt="auctionbay" width={120} />
             </Link>
             <button
               className="navbar-toggler"
@@ -68,10 +69,21 @@ const Navbar: FC = () => {
                   <>
                     <li className="nav-item">
                       <Dropdown>
-                        <Dropdown.Toggle variant="dark" id="dropdown-avatar">
-                          {authStore.user?.email}
+                        <Dropdown.Toggle variant="none" id="dropdown-avatar" className='no-border'>
+                          <div className="d-flex justify-content-center align-items-center avatar-small mt-2 mb-2">
+                            <Avatar
+                              round
+                              src={`${process.env.REACT_APP_API_URL}/files/${authStore.user?.avatar}`}
+                              alt={
+                                authStore.user?.first_name || authStore.user?.last_name
+                                  ? `${authStore.user?.first_name} ${authStore.user?.last_name}`
+                                  : authStore.user?.email
+                              }
+                              className='w-100 h-100 pb-0'
+                            />
+                          </div>
                         </Dropdown.Toggle>
-                        <Dropdown.Menu >
+                        <Dropdown.Menu>
                           <Dropdown.Item className='rounded-btn white-no-border m-3' onClick={handleOpenModal}>
                             <svg xmlns="http://www.w3.org/2000/svg" width="16" height="16" fill="currentColor" className="bi bi-gear" viewBox="0 0 16 16">
                               <path d="M8 4.754a3.246 3.246 0 1 0 0 6.492 3.246 3.246 0 0 0 0-6.492M5.754 8a2.246 2.246 0 1 1 4.492 0 2.246 2.246 0 0 1-4.492 0" />
@@ -107,7 +119,7 @@ const Navbar: FC = () => {
         </nav>
       </header>
 
-      <Modal show={showModal} onHide={handleCloseModal}>
+      <Modal show={showModal} onHide={handleCloseModal} centered>
         <Modal.Body>
           <UpdateUserForm defaultValues={authStore.user} onCloseModal={handleCloseModal} />
         </Modal.Body>
