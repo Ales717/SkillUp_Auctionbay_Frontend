@@ -27,6 +27,7 @@ export const useCreateUpdateItemForm = ({ defaultValues }: Props) => {
         handleSubmit,
         formState: { errors },
         control,
+        reset,
     } = useForm({
         defaultValues: {
             title: '',
@@ -43,6 +44,7 @@ export const useCreateUpdateItemForm = ({ defaultValues }: Props) => {
         handleSubmit,
         errors,
         control,
+        reset
     }
 }
 
