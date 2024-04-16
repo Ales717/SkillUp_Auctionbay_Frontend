@@ -26,4 +26,5 @@ export const UploadItemImage = async (formData: FormData, id: string) =>
     apiRequest<FormData, void>(
         'post',
         `${apiRoutes.UPLOAD_ITEM_IMAGE}/${id}`,
+        formData
     )

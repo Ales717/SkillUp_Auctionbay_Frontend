@@ -126,3 +126,18 @@ body{
   margin-left: auto;
   margin-right: auto;
 }
+
+textarea {
+  resize: none;
+}
+
+.form-with-icon-rounded {
+  border-radius: 1rem;
+  border-right: 0;
+  }
+
+.form-icon-rounded {
+  border-top-right-radius: 1rem 1rem;
+  border-bottom-right-radius: 1rem 1rem;
+  border-left: 0;
+  }
