@@ -33,8 +33,20 @@ const Auctionbay: FC = () => {
                 <>
 
                     {data?.data.data.length === 0 ? (
-
-                        <p>No roles found.</p>
+                        <div className='container-fluid h-75 d-flex justify-content-center align-items-center'>
+                            <div className="row">
+                                <div className="col-mb-6">
+                                    <h4 className='fw-bold'>Oh no, no auctions yet!</h4>
+                                    <p className='text-secondary text-center'>
+                                        <small>
+                                            To add a new auction clikc + button in <br />
+                                            navigation bar or wait for other users <br />
+                                            to add new auctions
+                                        </small>
+                                    </p>
+                                </div>
+                            </div>
+                        </div>
                     ) : (
                         <>
                             <Table striped bordered hover responsive>

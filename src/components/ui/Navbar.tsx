@@ -20,6 +20,8 @@ const Navbar: FC = () => {
 
   const [openModal, setOpenModal] = useState(false)
 
+  const currentUserId = authStore.user?.id
+
   const handleOpen = () => {
     setOpenModal(true)
   }
@@ -86,7 +88,7 @@ const Navbar: FC = () => {
                           </svg>
                         </Button>
 
-                        <CreateItemForm show={openModal} handleClose={handleClose} />
+                        <CreateItemForm show={openModal} currentUserId={currentUserId} handleClose={handleClose} />
 
                         <Dropdown>
                           <Dropdown.Toggle variant="none" id="dropdown-avatar" className='no-border pt-0 pe-0'>
