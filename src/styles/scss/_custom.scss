@@ -116,10 +116,35 @@ body{
   border: none;
 }
 
+.btn-circle-end {
+  width: auto;
+  height: 70px;
+  padding: 10px 16px;
+  font-weight: 500;
+  font-size: 16px;
+  line-height: 1.33;
+  border-radius: 45px;
+  margin-left: 5;
+  border: none;
+  display: inline-flex;
+  align-items: center;
+  background-color: #ffffff;
+  color: #000000;
+}
+
+.btn-circle-end:hover {
+  background-color: #ffffff;
+  color: #000000;
+}
+
+.btn-circle-end svg {
+  vertical-align: middle;
+  margin-right: 5px;
+}
 
 .circle{
   height: 4.9rem;
-  width: 10rem;
+  width: auto;
   padding-left: 5px;
   border-radius: 4.9rem;
   display: block;
@@ -197,4 +222,26 @@ textarea {
   color:#000000;
   font-weight: 300;
 }
+.tag-red-big{
+  background-color: #FFAA98 !important;
+  color:#000000;
+  font-weight: 400;
+}
 
+.detail{
+  background-color: #ffffff;
+  border-radius: 16px;
+  border: 0;
+}
+
+.detail-img-container {
+  flex: 1;
+  min-width: 50%;
+  max-width: 50%;
+}
+
+.detail-img{
+  max-width: 100%;
+  height: auto;
+  border-radius: 12px;
+}
