@@ -4,13 +4,14 @@ import { useQuery } from 'react-query'
 import * as API from 'api/Api'
 import { Button, Table } from 'react-bootstrap'
 import { ItemType } from 'models/item'
+import ItemCard from 'components/item/ItemCard'
 
 const Auctionbay: FC = () => {
     const [pageNumber, setPageNumber] = useState(1)
 
     const { data, isLoading, refetch } = useQuery(
-        ['fetchItems', pageNumber],
-        () => API.fetchItems(pageNumber),
+        ['allItems'],
+        () => API.allItems(),
         {
             keepPreviousData: true,
             refetchOnWindowFocus: false,
@@ -49,38 +50,13 @@ const Auctionbay: FC = () => {
                         </div>
                     ) : (
                         <>
-                            <Table striped bordered hover responsive>
-                                <thead>
-                                    <tr>
-                                        <th>Title</th>
-                                    </tr>
-                                </thead>
-                                <tbody>
-                                    {data?.data.data.map((item: ItemType, index: number) => (
-                                        <tr key={index}>
-
-                                            <td>{item.title}</td>
-                                        </tr>
-                                    ))}
-                                </tbody>
-                            </Table>
-                            {data?.data.meta.last_page > 1 && (
-                                <div>
-                                    <Button
-                                        className="me-2"
-                                        onClick={() => setPageNumber((prev) => prev - 1)}
-                                        disabled={pageNumber === 1}
-                                    >
-                                        Prev page
-                                    </Button>
-                                    <Button
-                                        onClick={() => setPageNumber((prev) => prev + 1)}
-                                        disabled={pageNumber === data?.data.meta.last_page}
-                                    >
-                                        Next page
-                                    </Button>
-                                </div>
-                            )}
+                            <div className="d-flex flex-wrap gap-4 justify-content-center">
+                                {data?.data.data.map((item: ItemType, index: number) => (
+                                    <div key={index} className="">
+                                        <ItemCard item={item} />
+                                    </div>
+                                ))}
+                            </div>
                         </>
                     )}
                 </>
