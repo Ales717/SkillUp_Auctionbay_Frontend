@@ -61,3 +61,21 @@
   font-weight: 900;
   font-style: normal;
 }
+
+@font-face {
+  font-family: 'Inter';
+  font-style: normal;
+  font-weight: 400;
+  src: local('Inter Regular'), local('Inter-Regular'),
+    url('./Inter/Inter-Regular.ttf') format('truetype'),
+    url('./Inter/Inter-Regular.ttf') format('truetype');
+}
+
+@font-face {
+  font-family: 'Inter';
+  font-style: normal;
+  font-weight: 500;
+  src: local('Inter Medium'), local('Inter-Medium'),
+    url('./Inter/Inter-Medium.ttf') format('truetype'),
+    url('./Inter/Inter-Medium.ttf') format('truetype');
+}
