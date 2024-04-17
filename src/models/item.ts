@@ -4,4 +4,5 @@ export interface ItemType {
     starting_price: number
     end_date: string
     image: string
+    user_id: string
 }

@@ -12,10 +12,11 @@ interface Props {
     defaultValues?: ItemType
     show: boolean
     handleClose: () => void
+    currentUserId?: string
 }
 
 
-const CreateItemForm: FC<Props> = ({ defaultValues, show, handleClose }) => {
+const CreateItemForm: FC<Props> = ({ defaultValues, show, handleClose, currentUserId }) => {
     const { handleSubmit, errors, control, reset } = useCreateUpdateItemForm({ defaultValues })
 
     const [apiError, setApiError] = useState('')
@@ -23,7 +24,6 @@ const CreateItemForm: FC<Props> = ({ defaultValues, show, handleClose }) => {
 
     const [file, setFile] = useState<File | null>(null)
     const [fileError, setFileError] = useState(false)
-
 
     const onSubmit = handleSubmit(async (data: CreateUpdateItemFields) => {
         if (!file) return
@@ -186,6 +186,19 @@ const CreateItemForm: FC<Props> = ({ defaultValues, show, handleClose }) => {
                                         </Form.Group>
                                     )}
                                 />
+                                <Controller
+                                    control={control}
+                                    name="user_id"
+                                    defaultValue={currentUserId}
+                                    render={({ field }) => (
+                                        <input
+                                            {...field}
+                                            type="hidden"
+                                            name="user_id"
+                                        />
+                                    )}
+                                />
+
                             </div>
                         </div>
 
