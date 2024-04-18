@@ -12,6 +12,9 @@ export const fetchUser = async () =>
 export const getUser = async (id: string) =>
   apiRequest<undefined, UserType>('get', `${apiRoutes.USERS_PREFIX}/${id}`)
 
+export const currentUser = async () =>
+  apiRequest<undefined, UserType>('get', `${apiRoutes.USERS_PREFIX}`)
+
 export const signout = async () =>
   apiRequest<undefined, void>('post', apiRoutes.SIGNOUT)
 
