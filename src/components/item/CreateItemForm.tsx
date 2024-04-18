@@ -26,6 +26,15 @@ const CreateItemForm: FC<Props> = ({ defaultValues, show, handleClose, currentUs
     const [fileError, setFileError] = useState(false)
 
     const onSubmit = handleSubmit(async (data: CreateUpdateItemFields) => {
+        if (currentUserId) {
+            data.user_id = currentUserId
+        } else {
+            console.error('currentUserId is undefined')
+            return
+        }
+
+        console.log(data)
+
         if (!file) return
         const response = await API.createItem(data)
         if (response.data?.statusCode === StatusCode.BAD_REQUEST) {
@@ -50,6 +59,7 @@ const CreateItemForm: FC<Props> = ({ defaultValues, show, handleClose, currentUs
                 setApiError(fileResponse.data.message)
                 setShowError(true)
             } else {
+
                 reset()
                 handleClose()
             }
@@ -184,18 +194,6 @@ const CreateItemForm: FC<Props> = ({ defaultValues, show, handleClose, currentUs
                                                 </div>
                                             )}
                                         </Form.Group>
-                                    )}
-                                />
-                                <Controller
-                                    control={control}
-                                    name="user_id"
-                                    defaultValue={currentUserId}
-                                    render={({ field }) => (
-                                        <input
-                                            {...field}
-                                            type="hidden"
-                                            name="user_id"
-                                        />
                                     )}
                                 />
 

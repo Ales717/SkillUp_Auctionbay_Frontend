@@ -12,7 +12,7 @@ export const fetchItems = async (pageNumber: number) =>
 export const allItems = async () =>
     apiRequest<undefined, ItemType[]>(
         'get',
-        `${apiRoutes.ITEM_PREFIX}`
+        `${apiRoutes.ITEM_PREFIX}/all`
     )
 
 export const createItem = async (data: CreateUpdateItemFields) =>
@@ -27,4 +27,10 @@ export const UploadItemImage = async (formData: FormData, id: string) =>
         'post',
         `${apiRoutes.UPLOAD_ITEM_IMAGE}/${id}`,
         formData
+    )
+
+export const findOne = async (id: string) =>
+    apiRequest<undefined, ItemType>(
+        'get',
+        `${apiRoutes.ITEM_PREFIX}/${id}`
     )

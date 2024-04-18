@@ -22,7 +22,7 @@ export const useCreateUpdateItemForm = ({ defaultValues }: Props) => {
         description: Yup.string().required('Description is required'),
         starting_price: Yup.number().required('Price is required'),
         end_date: Yup.string().required('End date is required'),
-        user_id: Yup.string().required(),
+        user_id: Yup.string().notRequired(),
     })
 
     const {

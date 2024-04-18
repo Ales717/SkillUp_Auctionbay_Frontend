@@ -1,15 +1,12 @@
 import Layout from 'components/ui/Layout'
-import { FC, useState } from 'react'
+import { FC } from 'react'
 import { useQuery } from 'react-query'
 import * as API from 'api/Api'
-import { Button, Table } from 'react-bootstrap'
-import { ItemType } from 'models/item'
+import { ItemTypeId } from 'models/itemId'
 import ItemCard from 'components/item/ItemCard'
 
 const Auctionbay: FC = () => {
-    const [pageNumber, setPageNumber] = useState(1)
-
-    const { data, isLoading, refetch } = useQuery(
+    const { data, isLoading } = useQuery(
         ['allItems'],
         () => API.allItems(),
         {
@@ -17,10 +14,6 @@ const Auctionbay: FC = () => {
             refetchOnWindowFocus: false,
         },
     )
-
-    if (data) {
-        console.log(data.title)
-    }
 
     return (
         <Layout>
@@ -33,7 +26,7 @@ const Auctionbay: FC = () => {
             ) : (
                 <>
 
-                    {data?.data.data.length === 0 ? (
+                    {data?.data.length === 0 ? (
                         <div className='container-fluid h-75 d-flex justify-content-center align-items-center'>
                             <div className="row">
                                 <div className="col-mb-6">
@@ -51,7 +44,7 @@ const Auctionbay: FC = () => {
                     ) : (
                         <>
                             <div className="d-flex flex-wrap gap-4 justify-content-center">
-                                {data?.data.data.map((item: ItemType, index: number) => (
+                                {data?.data.map((item: ItemTypeId, index: number) => (
                                     <div key={index} className="">
                                         <ItemCard item={item} />
                                     </div>
