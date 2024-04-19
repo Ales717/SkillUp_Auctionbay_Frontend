@@ -26,6 +26,15 @@ body{
   text-decoration: none;
   border: none;
 }
+.rounded-btn-white {
+  display: inline-block;
+  padding: 0.5rem 1rem;
+  border-radius: 1rem;
+  background-color: #ffffff;
+  color: #000000;
+  text-decoration: none;
+  border: 1px solid #000000;
+}
 .rounded-btn:hover {
   background-color: #191b1d; 
   color: #ffffff;
@@ -131,6 +140,47 @@ body{
   background-color: #ffffff;
   color: #000000;
 }
+.btn-circle-end-grey {
+  width: auto;
+  height: 50px;
+  padding: 10px 16px;
+  font-weight: 500;
+  font-size: 16px;
+  line-height: 1.33;
+  border-radius: 45px;
+  margin-left: 5;
+  border: none;
+  display: inline-flex;
+  align-items: center;
+  background-color: #EDF4F2;
+  color: #000000;
+}
+.btn-circle-end-black {
+  width: auto;
+  height: 50px;
+  padding: 10px 16px;
+  font-weight: 500;
+  font-size: 16px;
+  line-height: 1.33;
+  border-radius: 45px;
+  margin-left: 5;
+  border: none;
+  display: inline-flex;
+  align-items: center;
+  background-color: #000000;
+  color: #ffffff;
+}
+.btn-circle-end-black:hover {
+  height: 50px;
+  background-color: #000000;
+  color: #ffffff;
+}
+
+
+.btn-circle-end-grey:hover {
+  background-color: #EDF4F2;
+  color: #000000;
+}
 
 .btn-circle-end:hover {
   background-color: #ffffff;
@@ -150,6 +200,17 @@ body{
   display: block;
   margin-left: auto;
   margin-right: auto;
+}
+
+.nav-rounded-grey{
+  height: 50px;
+  width: auto;
+  padding-left: 5px;
+  border-radius: 3.9rem;
+  display: block;
+  margin-left: auto;
+  margin-right: auto;
+  background-color: #EDF4F2;
 }
 
 textarea {
@@ -174,9 +235,18 @@ textarea {
   min-height: 250px;
   min-width: 216px;
   background-color: #ffffff;
-  border-radius: 16;
+  border-radius: 16px;
   border: 0;
+}
 
+.card-edit{
+  height:auto;
+  width: 216px;
+  min-height: 250px;
+  min-width: 216px;
+  background-color: #ffffff;
+  border-radius: 16px;
+  border: 0;
 }
 
 .card-head{

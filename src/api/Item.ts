@@ -34,3 +34,12 @@ export const findOne = async (id: string) =>
         'get',
         `${apiRoutes.ITEM_PREFIX}/${id}`
     )
+
+export const findByUserId = async (id: string) =>
+    apiRequest<undefined, ItemType>(
+        'get',
+        `${apiRoutes.ITEM_PREFIX}/user/${id}`
+    )
+
+export const deleteItem = async (id: string) =>
+    apiRequest<string, ItemType>('delete', `${apiRoutes.ITEM_PREFIX}/${id}`)
