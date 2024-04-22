@@ -7,6 +7,12 @@ import { StatusCode } from 'constants/errorConstants'
 import { Controller } from 'react-hook-form'
 import ToastContainer from 'react-bootstrap/ToastContainer'
 import Toast from 'react-bootstrap/Toast'
+import { routes } from 'constants/routesConstants'
+import { useNavigate } from 'react-router-dom'
+import DatePicker from 'react-datepicker'
+
+import 'react-datepicker/dist/react-datepicker.css'
+
 
 interface Props {
     defaultValues?: ItemType
@@ -21,9 +27,11 @@ const CreateItemForm: FC<Props> = ({ defaultValues, show, handleClose, currentUs
 
     const [apiError, setApiError] = useState('')
     const [showError, setShowError] = useState(false)
+    const navigate = useNavigate()
 
     const [file, setFile] = useState<File | null>(null)
     const [fileError, setFileError] = useState(false)
+
 
     const onSubmit = handleSubmit(async (data: CreateUpdateItemFields) => {
         if (currentUserId) {
@@ -32,8 +40,6 @@ const CreateItemForm: FC<Props> = ({ defaultValues, show, handleClose, currentUs
             console.error('currentUserId is undefined')
             return
         }
-
-        console.log(data)
 
         if (!file) return
         const response = await API.createItem(data)
@@ -59,9 +65,9 @@ const CreateItemForm: FC<Props> = ({ defaultValues, show, handleClose, currentUs
                 setApiError(fileResponse.data.message)
                 setShowError(true)
             } else {
-
-                reset()
-                handleClose()
+                navigate(`${routes.AUCTIONS}/profile/${currentUserId}`)
+                /*  reset()
+                 handleClose() */
             }
         }
     })
@@ -179,15 +185,16 @@ const CreateItemForm: FC<Props> = ({ defaultValues, show, handleClose, currentUs
                                     render={({ field }) => (
                                         <Form.Group className="mb-3">
                                             <FormLabel htmlFor="end_date">End date</FormLabel>
-                                            <input
+                                            <DatePicker
                                                 {...field}
-                                                type="text"
-                                                aria-label="End date"
-                                                aria-describedby="end_date"
-                                                className={
-                                                    errors.end_date ? 'form-control is-invalid form-rounded' : 'form-control form-rounded'
-                                                }
+                                                selected={new Date(field?.value)}
+                                                onChange={(date: Date | null) => field.onChange(date)}
+                                                className={errors.end_date ? 'form-control is-invalid form-rounded' : 'form-control form-rounded'}
+                                                showTimeSelect
+                                                dateFormat="yyyy-MM-dd'T'HH:mm:ss.SSS'Z'"
+
                                             />
+
                                             {errors.end_date && (
                                                 <div className="invalid-feedback text-danger">
                                                     {errors.end_date.message}
@@ -196,9 +203,10 @@ const CreateItemForm: FC<Props> = ({ defaultValues, show, handleClose, currentUs
                                         </Form.Group>
                                     )}
                                 />
-
                             </div>
                         </div>
+
+
 
 
 

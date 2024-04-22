@@ -69,9 +69,10 @@ const MyAuctions: FC<Props> = ({ currentUserId }) => {
                     ) : (
                         <>
                             <div className="d-flex flex-wrap gap-4 justify-content-center">
+
                                 {data?.data.map((item: ItemTypeId, index: number) => (
                                     <div key={index} className="">
-                                        <ItemCardEditable item={item} onDelete={() => handleDelete(item.id)} />
+                                        <ItemCardEditable item={item} userId={currentUserId} onDelete={() => handleDelete(item.id)} />
                                     </div>
                                 ))}
                             </div>

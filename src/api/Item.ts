@@ -41,5 +41,12 @@ export const findByUserId = async (id: string) =>
         `${apiRoutes.ITEM_PREFIX}/user/${id}`
     )
 
+export const updateItem = async (data: CreateUpdateItemFields, id: string) =>
+    apiRequest<CreateUpdateItemFields, ItemType>(
+        'patch',
+        `${apiRoutes.ITEM_PREFIX}/${id}`,
+        data
+    )
+
 export const deleteItem = async (id: string) =>
     apiRequest<string, ItemType>('delete', `${apiRoutes.ITEM_PREFIX}/${id}`)

@@ -17,7 +17,6 @@ const Profile = () => {
     )
 
     const [activeSection, setActiveSection] = useState('myAuctions')
-
     const handleButtonClick = (section: SetStateAction<string>) => {
         setActiveSection(section)
     }
