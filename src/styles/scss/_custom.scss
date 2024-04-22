@@ -16,6 +16,15 @@ body{
   margin: 0 auto;
   padding: 25px 0;
 }
+.rounded {
+  display: inline-block;
+  padding: 0.3rem 1rem;
+  border-radius: 1rem !important;
+  text-decoration: none;
+  border: none;
+  max-height: 30px;
+  text-align: center;
+}
 
 .rounded-btn {
   display: inline-block;
@@ -318,4 +327,16 @@ textarea {
   max-width: 100%;
   height: auto;
   border-radius: 12px;
+}
+
+.bid{
+  padding: 5px;
+  border-bottom: 1px solid #EDF4F2;
+}
+
+.bid-avatar{
+  border-radius: 30px;
+  max-width: 40px;
+  max-height: 40px;
+  padding-bottom: 3px;
 }
