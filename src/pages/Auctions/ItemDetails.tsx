@@ -34,6 +34,28 @@ const ItemDetails: FC<Props> = ({ defaultValues }) => {
         () => API.itemBids(id || ''),
     )
 
+    let minAmount = data?.data.starting_price
+
+
+    let timeLeft = 'Done'
+    let badgeClassName = 'tag-black-big'
+
+    if (data?.data.end_date) {
+        const endDate = new Date(data?.data.end_date)
+        const currentDate = new Date()
+        const difference = endDate.getTime() - currentDate.getTime()
+        const daysLeft = Math.ceil(difference / (1000 * 3600 * 24))
+        if (daysLeft > 1) {
+            timeLeft = `${daysLeft} days`
+            badgeClassName = 'tag-white-big'
+        } else if (daysLeft === 1) {
+            const hoursLeft = Math.ceil(difference / (1000 * 3600))
+            timeLeft = `${hoursLeft} hours`
+            badgeClassName = 'tag-red-big'
+        }
+    }
+
+
     const onSubmit = handleSubmit(async (data: CreateBidFields) => {
         if (currentUserId) {
             data.user_id = currentUserId
@@ -77,7 +99,7 @@ const ItemDetails: FC<Props> = ({ defaultValues }) => {
                     <div className="p-2 mb-3 flex-grow-1 detail ">
                         <div className='d-flex justify-content-between p-1'>
                             <Badge pill className='tag-red-big'>Outbid</Badge>
-                            <Badge pill className="tag-red-big">24h</Badge>
+                            <Badge pill className={badgeClassName}>{timeLeft}</Badge>
                         </div>
                         <div className="p-2 m-0"><h3 className='fw-bolder'>{data?.data.title}</h3></div>
                         <div className="ps-2 pe-2 m-0 font-weight-light"><small>{data?.data.description}</small></div>
@@ -92,9 +114,10 @@ const ItemDetails: FC<Props> = ({ defaultValues }) => {
 
                                             <input
                                                 {...field}
-                                                type="text"
+                                                type="number"
                                                 aria-label="Amount"
                                                 aria-describedby="amount"
+                                                min={minAmount}
                                                 className={
                                                     errors.amount ? 'form-control is-invalid form-rounded' : 'form-control form-rounded'
                                                 }
@@ -116,28 +139,34 @@ const ItemDetails: FC<Props> = ({ defaultValues }) => {
                     <div className="p-2 flex-grow-1 detail">
                         <div className="p-2 m-0">
                             <h4 className='fw-bolder'>Bidding history {bidData?.data && bidData.data.length > 0 ? `(${bidData.data.length})` : ''}</h4>
-                            {bidData?.data.sort((a: BidType, b: BidType) => b.amount - a.amount).map((bid: BidType, index: number) => (
-                                <div key={index} className="d-flex justify-content-between bid">
-                                    <div className='d-flex'>
-                                        <img src={`${process.env.REACT_APP_API_URL}/files/${bid.user?.avatar}`} alt="user avatar" className='bid-avatar' />
-                                        <p className='pt-1 ps-1'> {bid.user?.first_name} {bid.user?.last_name}</p>
-                                    </div>
-                                    <div className='d-flex'>
-                                        <div className='pt-1 pe-3'>
-                                            {new Date(bid.date).toLocaleString('de-AT', {
-                                                hour: 'numeric',
-                                                minute: '2-digit',
-                                                day: '2-digit',
-                                                month: '2-digit',
-                                                year: 'numeric',
+                            {bidData?.data.sort((a: BidType, b: BidType) => b.amount - a.amount).map((bid: BidType, index: number) => {
+                                if (bid.amount > minAmount) {
+                                    minAmount = bid.amount
+                                }
+                                return (
+                                    <div key={index} className="d-flex justify-content-between bid">
+                                        <div className='d-flex'>
+                                            <img src={`${process.env.REACT_APP_API_URL}/files/${bid.user?.avatar}`} alt="user avatar" className='bid-avatar' />
+                                            <p className='pt-1 ps-1'> {bid.user?.first_name} {bid.user?.last_name}</p>
+                                        </div>
+                                        <div className='d-flex'>
+                                            <div className='pt-1 pe-3'>
+                                                {new Date(bid.date).toLocaleString('de-AT', {
+                                                    hour: 'numeric',
+                                                    minute: '2-digit',
+                                                    day: '2-digit',
+                                                    month: '2-digit',
+                                                    year: 'numeric',
 
-                                            })}</div>
-                                        <div className='rounded bright-yellow '>
-                                            {bid.amount} €
+                                                })}
+                                            </div>
+                                            <div className='rounded bright-yellow '>
+                                                {bid.amount} €
+                                            </div>
                                         </div>
                                     </div>
-                                </div>
-                            ))}
+                                )
+                            })}
                         </div>
                     </div>
                 </div>
