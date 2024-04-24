@@ -8,6 +8,9 @@ body{
 .layout-container {
   height: calc(100vh - 200px);
 }
+input[type=number] {
+  -moz-appearance: textfield;
+}
 
 .login-form,
 .register-form {
@@ -308,6 +311,26 @@ textarea {
 .tag-red-big{
   background-color: #FFAA98 !important;
   color:#000000;
+  font-weight: 400;
+}
+.tag-white{
+  background-color: #ffffff !important;
+  color:#000000;
+  font-weight: 300;
+}
+.tag-white-big{
+  background-color: #ffffff !important;
+  color:#000000;
+  font-weight: 400;
+}
+.tag-black{
+  background-color: #000000 !important;
+  color:#ffffff;
+  font-weight: 300;
+}
+.tag-black-big{
+  background-color: #000000 !important;
+  color:#ffffff;
   font-weight: 400;
 }
 
