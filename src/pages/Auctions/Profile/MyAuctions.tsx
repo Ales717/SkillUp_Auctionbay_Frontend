@@ -8,6 +8,7 @@ import { StatusCode } from 'constants/errorConstants'
 
 interface Props {
     currentUserId?: string
+
 }
 
 
@@ -44,6 +45,10 @@ const MyAuctions: FC<Props> = ({ currentUserId }) => {
         mutate(id)
     }
 
+    const handleFormSubmit = () => {
+        refetch()
+    }
+
     return (
         <div>
             {isLoading ? (
@@ -68,11 +73,11 @@ const MyAuctions: FC<Props> = ({ currentUserId }) => {
                         </div>
                     ) : (
                         <>
-                            <div className="d-flex flex-wrap gap-4 justify-content-center">
+                            <div className="d-flex flex-wrap gap-4 justify-content-start">
 
                                 {data?.data.map((item: ItemTypeId, index: number) => (
                                     <div key={index} className="">
-                                        <ItemCardEditable item={item} userId={currentUserId} onDelete={() => handleDelete(item.id)} />
+                                        <ItemCardEditable item={item} userId={currentUserId} onDelete={() => handleDelete(item.id)} onFormSubmit={handleFormSubmit} />
                                     </div>
                                 ))}
                             </div>

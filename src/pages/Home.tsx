@@ -16,6 +16,12 @@ const Home: FC = () => {
           </NavLink>
         </div>
       </div>
+      <div className="home-img-container">
+        <div className="container-fluid">
+          <img src="/images/home.png" alt="auctionbay" className="home_img" />
+        </div>
+      </div>
+
     </Layout>
   )
 }

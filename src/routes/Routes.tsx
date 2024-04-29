@@ -56,7 +56,7 @@ export const AppRoutes: AppRoute[] = [
   },
   {
     type: RouteType.PRIVATE,
-    path: '/auctions/profile/:userId',
+    path: '/profile/:userId',
     children: <AuctionbayProfile />,
   },
   // Public Routes
