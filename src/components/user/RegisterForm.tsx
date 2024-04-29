@@ -51,14 +51,8 @@ const RegisterForm = () => {
                 setShowError(true)
             } else {
 
-                const userResponse = await API.fetchUser()
-                if (userResponse.data?.statusCode === StatusCode.INTERNAL_SERVER_ERROR) {
-                    setApiError(userResponse.data.message)
-                    setShowError(true)
-                } else {
-                    authStore.login(userResponse.data)
-                    navigate(routes.HOME)
-                }
+                authStore.login(loginResponse.data)
+                navigate(routes.AUCTIONS)
             }
         }
     })

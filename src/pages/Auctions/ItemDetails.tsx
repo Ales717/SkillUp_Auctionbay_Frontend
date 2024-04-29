@@ -34,20 +34,24 @@ const ItemDetails: FC<Props> = ({ defaultValues }) => {
         () => API.itemBids(id || ''),
     )
 
+    const hasCurrentUserBid = bidData?.data.some((bid: { user: { id: string | undefined } }) => bid.user.id === currentUserId)
+
     const biggestBidUserId = bidData?.data[0]?.user?.id
 
     let status = 'In progress'
     let badgeClass = 'tag-yellow'
-
-    if (biggestBidUserId) {
-        if (biggestBidUserId === currentUserId) {
-            status = 'Winnig'
-            badgeClass = 'tag-green'
-        } else if (biggestBidUserId !== currentUserId) {
-            status = 'Outbid'
-            badgeClass = 'tag-red'
+    if (hasCurrentUserBid) {
+        if (biggestBidUserId) {
+            if (biggestBidUserId === currentUserId) {
+                status = 'Winnig'
+                badgeClass = 'tag-green'
+            } else if (biggestBidUserId !== currentUserId) {
+                status = 'Outbid'
+                badgeClass = 'tag-red'
+            }
         }
     }
+
 
 
     let minAmount = data?.data.starting_price

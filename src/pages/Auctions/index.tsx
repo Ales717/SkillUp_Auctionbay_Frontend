@@ -43,7 +43,7 @@ const Auctionbay: FC = () => {
                         </div>
                     ) : (
                         <>
-                            <div className="d-flex flex-wrap gap-4 justify-content-center">
+                            <div className="d-flex flex-wrap gap-4 justify-content-start">
                                 {data?.data.map((item: ItemTypeId, index: number) => (
                                     <div key={index} className="">
                                         <ItemCard item={item} />

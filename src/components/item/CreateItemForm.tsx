@@ -7,12 +7,11 @@ import { StatusCode } from 'constants/errorConstants'
 import { Controller } from 'react-hook-form'
 import ToastContainer from 'react-bootstrap/ToastContainer'
 import Toast from 'react-bootstrap/Toast'
-import { routes } from 'constants/routesConstants'
 import { useNavigate } from 'react-router-dom'
+import { routes } from 'constants/routesConstants'
 import DatePicker from 'react-datepicker'
 
 import 'react-datepicker/dist/react-datepicker.css'
-
 
 interface Props {
     defaultValues?: ItemType
@@ -31,7 +30,7 @@ const CreateItemForm: FC<Props> = ({ defaultValues, show, handleClose, currentUs
 
     const [file, setFile] = useState<File | null>(null)
     const [fileError, setFileError] = useState(false)
-
+    const currrentDate = new Date()
 
     const onSubmit = handleSubmit(async (data: CreateUpdateItemFields) => {
         if (currentUserId) {
@@ -39,6 +38,12 @@ const CreateItemForm: FC<Props> = ({ defaultValues, show, handleClose, currentUs
         } else {
             console.error('currentUserId is undefined')
             return
+        }
+        console.log(data.end_date)
+        if (data.end_date) {
+            const dateObject = new Date(data.end_date)
+            const formattedDate = `${dateObject.getFullYear()}-${(dateObject.getMonth() + 1).toString().padStart(2, '0')}-${dateObject.getDate().toString().padStart(2, '0')}T${dateObject.getHours().toString().padStart(2, '0')}:${dateObject.getMinutes().toString().padStart(2, '0')}:${dateObject.getSeconds().toString().padStart(2, '0')}.${dateObject.getMilliseconds().toString().padStart(3, '0')}Z`
+            data.end_date = formattedDate
         }
 
         if (!file) return
@@ -65,9 +70,9 @@ const CreateItemForm: FC<Props> = ({ defaultValues, show, handleClose, currentUs
                 setApiError(fileResponse.data.message)
                 setShowError(true)
             } else {
-                navigate(`${routes.AUCTIONS}/profile/${currentUserId}`)
-                /*  reset()
-                 handleClose() */
+                navigate(`${routes.PROFILE}/${currentUserId}`)
+                reset()
+                handleClose()
             }
         }
     })
@@ -79,6 +84,9 @@ const CreateItemForm: FC<Props> = ({ defaultValues, show, handleClose, currentUs
             setFile(myfile)
         }
     }
+    const handleRemoveImage = () => {
+        setFile(null)
+    }
 
     return (
         <>
@@ -87,21 +95,31 @@ const CreateItemForm: FC<Props> = ({ defaultValues, show, handleClose, currentUs
                     <h4 className='fw-bold'>Add auction</h4>
                     <Form onSubmit={onSubmit}>
                         <Form.Group className="mb-3">
-                            <FormLabel htmlFor="image">Item image</FormLabel>
-                            <Form.Control
-                                onChange={handleFileChange}
-                                id="image"
-                                name="image"
-                                type="file"
-                                aria-label="Item image"
-                                aria-describedby="image"
-                                className={fileError ? 'form-control is-invalid form-rounded' : 'form-control form-rounded'}
-                            />
-                            {fileError && (
-                                <div className="d-block invalid-feedback text-danger mb-2">
-                                    Field product image is required
-                                </div>
-                            )}
+                            <div className="image-upload-container">
+                                {!file && (
+                                    <label htmlFor="image" className="add-image-button">
+                                        <input
+                                            type="file"
+                                            id="image"
+                                            accept="image/*"
+                                            onChange={handleFileChange}
+                                            style={{ display: 'none' }}
+                                        />
+                                        <div className='btn-add-img'>Add Image</div>
+                                    </label>
+                                )}
+                                {file && (
+                                    <div className="selected-image-container">
+                                        <img src={URL.createObjectURL(file)} alt="Selected" />
+                                        <Button onClick={handleRemoveImage} className='rounded-btn'>
+                                            <svg xmlns="http://www.w3.org/2000/svg" width="16" height="16" fill="currentColor" className="bi bi-trash" viewBox="0 0 16 16">
+                                                <path d="M5.5 5.5A.5.5 0 0 1 6 6v6a.5.5 0 0 1-1 0V6a.5.5 0 0 1 .5-.5m2.5 0a.5.5 0 0 1 .5.5v6a.5.5 0 0 1-1 0V6a.5.5 0 0 1 .5-.5m3 .5a.5.5 0 0 0-1 0v6a.5.5 0 0 0 1 0z" />
+                                                <path d="M14.5 3a1 1 0 0 1-1 1H13v9a2 2 0 0 1-2 2H5a2 2 0 0 1-2-2V4h-.5a1 1 0 0 1-1-1V2a1 1 0 0 1 1-1H6a1 1 0 0 1 1-1h2a1 1 0 0 1 1 1h3.5a1 1 0 0 1 1 1zM4.118 4 4 4.059V13a1 1 0 0 0 1 1h6a1 1 0 0 0 1-1V4.059L11.882 4zM2.5 3h11V2h-11z" />
+                                            </svg>
+                                        </Button>
+                                    </div>
+                                )}
+                            </div>
                         </Form.Group>
                         <Controller
                             control={control}
@@ -187,14 +205,12 @@ const CreateItemForm: FC<Props> = ({ defaultValues, show, handleClose, currentUs
                                             <FormLabel htmlFor="end_date">End date</FormLabel>
                                             <DatePicker
                                                 {...field}
-                                                selected={new Date(field?.value)}
+                                                selected={field.value ? new Date(field.value) : null}
                                                 onChange={(date: Date | null) => field.onChange(date)}
                                                 className={errors.end_date ? 'form-control is-invalid form-rounded' : 'form-control form-rounded'}
                                                 showTimeSelect
                                                 dateFormat="yyyy-MM-dd'T'HH:mm:ss.SSS'Z'"
-
                                             />
-
                                             {errors.end_date && (
                                                 <div className="invalid-feedback text-danger">
                                                     {errors.end_date.message}
@@ -203,10 +219,9 @@ const CreateItemForm: FC<Props> = ({ defaultValues, show, handleClose, currentUs
                                         </Form.Group>
                                     )}
                                 />
+
                             </div>
                         </div>
-
-
 
 
 

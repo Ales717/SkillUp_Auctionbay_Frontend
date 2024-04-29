@@ -7,6 +7,7 @@ body{
 
 .layout-container {
   height: calc(100vh - 200px);
+  width: 100%;
 }
 input[type=number] {
   -moz-appearance: textfield;
@@ -155,6 +156,38 @@ input[type=number] {
   align-items: center;
   background-color: #ffffff;
   color: #000000;
+}
+
+.btn-add-img{
+  width: auto;
+  height: 45px;
+  padding: 10px 16px;
+  font-weight: 500;
+  font-size: 16px;
+  line-height: 1.33;
+  border-radius: 20px;
+  margin-left: 5;
+  border: 1px solid black;
+  display: inline-flex;
+  align-items: center;
+  background-color: #F6F6F4;
+  color: #000000;
+}
+
+.btn-circle-end-black-big {
+  width: auto;
+  height: 70px;
+  padding: 10px 16px;
+  font-weight: 500;
+  font-size: 16px;
+  line-height: 1.33;
+  border-radius: 45px;
+  margin-left: 5;
+  border: none;
+  display: inline-flex;
+  align-items: center;
+  background-color: #272D2D;
+  color: #ffffff;
 }
 .btn-circle-end-grey {
   width: auto;
@@ -402,4 +435,66 @@ textarea {
 .no-border {
   border: 0;
   box-shadow: none;
+}
+
+.link {
+  text-decoration: none;
+}
+
+.image-upload-container {
+  background-color: #F6F6F4;
+  position: relative;
+  width: auto; 
+  height: 200px; 
+  border: none;
+  border-radius: 5px;
+  overflow: hidden;
+  border-radius: 16px;
+}
+
+.add-image-button {
+  position: absolute;
+  top: 50%;
+  left: 50%;
+  transform: translate(-50%, -50%);
+  cursor: pointer;
+}
+
+.selected-image-container {
+  position: relative;
+  width: 100%;
+  height: 100%;
+}
+
+.selected-image-container img {
+  width: 100%;
+  height: 100%;
+  object-fit: cover;
+}
+
+.selected-image-container button {
+  position: absolute;
+  top: 10px;
+  right: 10px;
+}
+.home-img-container {
+  position: absolute;
+  bottom: 0;
+  left: 0;
+  width: auto;
+  padding-left: 50px; 
+  padding-right: 50px; 
+  display: flex;
+  justify-content: center;
+  max-height: 700px; 
+}
+
+.home-img-container .container-fluid {
+  padding: 0;
+}
+
+.home-img-container img {
+  width: 100%;
+  max-height: 100%;
+  object-fit: contain;
 }

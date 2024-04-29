@@ -44,7 +44,7 @@ const Won = () => {
                         </div>
                     ) : (
                         <>
-                            <div className="d-flex flex-wrap gap-4 justify-content-center">
+                            <div className="d-flex flex-wrap gap-4 justify-content-start">
                                 {data?.data.map((bid: any, index: number) => (
                                     <div key={index} className="">
                                         <ItemCard item={bid.item} />

@@ -1,6 +1,6 @@
 import { ItemTypeId } from 'models/itemId'
 import { FC, useState } from 'react'
-import { Button } from 'react-bootstrap'
+import { Button, Modal } from 'react-bootstrap'
 import Badge from 'react-bootstrap/Badge'
 import UpdateItemForm from './UpdateItemForm'
 
@@ -10,10 +10,11 @@ interface Props {
     item: ItemTypeId
     userId?: string
     onDelete: (id: string) => void
+    onFormSubmit: () => void
 
 }
 
-const ItemCardEditable: FC<Props> = ({ item, userId, onDelete }) => {
+const ItemCardEditable: FC<Props> = ({ item, userId, onDelete, onFormSubmit }) => {
     const [openModal, setOpenModal] = useState(false)
 
     const handleOpen = () => {
@@ -45,13 +46,25 @@ const ItemCardEditable: FC<Props> = ({ item, userId, onDelete }) => {
         <div className='card-edit'>
             <div className="card-head">
                 <div className='d-flex justify-content-between'>
-                    {timeLeft !== 'Done' && (
+                    {timeLeft !== 'Done' ? (
                         <>
                             <Badge pill className='tag-yellow-big'>In Progress</Badge>
+                            <Badge pill className={badgeClassName}>
+                                {timeLeft}
+                                <svg xmlns="http://www.w3.org/2000/svg" width="11" height="11" fill="currentColor" className="bi bi-clock ms-1" viewBox="0 0 16 16">
+                                    <path d="M8 3.5a.5.5 0 0 0-1 0V9a.5.5 0 0 0 .252.434l3.5 2a.5.5 0 0 0 .496-.868L8 8.71z" />
+                                    <path d="M8 16A8 8 0 1 0 8 0a8 8 0 0 0 0 16m7-8A7 7 0 1 1 1 8a7 7 0 0 1 14 0" />
+                                </svg>
+                            </Badge>
                         </>
+                    ) : (
+                        <Badge pill className={badgeClassName}>
+                            {timeLeft}
+
+                        </Badge>
                     )}
 
-                    <Badge pill className={badgeClassName}>{timeLeft}</Badge>
+
                 </div>
                 <div className="card-title m-0">{item.title}</div>
                 <div className='card-price m-0'>{item.starting_price} €</div>
@@ -78,9 +91,17 @@ const ItemCardEditable: FC<Props> = ({ item, userId, onDelete }) => {
                 )}
 
 
-                <UpdateItemForm show={openModal} defaultValues={item} userId={userId} handleClose={handleClose} />
+                <Modal show={openModal} onHide={handleClose} centered>
+                    <Modal.Body>
+                        <UpdateItemForm defaultValues={item} userId={userId} handleClose={handleClose} onFormSubmit={onFormSubmit} />
+                    </Modal.Body>
+                </Modal>
+
+
             </div>
         </div>
+
+
 
     )
 }

@@ -14,11 +14,11 @@ import 'react-datepicker/dist/react-datepicker.css'
 interface Props {
     defaultValues?: ItemTypeId
     userId?: string
-    show: boolean
     handleClose: () => void
+    onFormSubmit: () => void
 }
 
-const UpdateItemForm: FC<Props> = ({ defaultValues, userId, show, handleClose }) => {
+const UpdateItemForm: FC<Props> = ({ defaultValues, userId, handleClose, onFormSubmit }) => {
     const { handleSubmit, errors, control, reset } = useCreateUpdateItemForm({ defaultValues })
 
     const [apiError, setApiError] = useState('')
@@ -27,6 +27,11 @@ const UpdateItemForm: FC<Props> = ({ defaultValues, userId, show, handleClose })
 
     const [file, setFile] = useState<File | null>(null)
     const [fileError, setFileError] = useState(false)
+
+    const handleCloseModal = () => {
+        handleClose()
+    }
+
 
 
     const onSubmit = handleSubmit(async (data: CreateUpdateItemFields) => {
@@ -52,7 +57,9 @@ const UpdateItemForm: FC<Props> = ({ defaultValues, userId, show, handleClose })
             setShowError(true)
         } else {
             if (!file) {
+                navigate(`${routes.PROFILE}/${userId}`)
                 handleClose()
+                onFormSubmit()
                 return
             }
 
@@ -71,7 +78,9 @@ const UpdateItemForm: FC<Props> = ({ defaultValues, userId, show, handleClose })
                 setApiError(fileResponse.data.message)
                 setShowError(true)
             } else {
-                navigate(`${routes.AUCTIONS}/profile/${userId}`)
+                navigate(`${routes.PROFILE}/${userId}`)
+                handleClose()
+                onFormSubmit()
             }
         }
     })
@@ -87,88 +96,116 @@ const UpdateItemForm: FC<Props> = ({ defaultValues, userId, show, handleClose })
             setFile(myfile)
         }
     }
+    const handleRemoveImage = () => {
+        setFile(null)
+    }
 
     return (
-        <Modal show={show} onHide={handleClose} centered>
-            <Modal.Body>
-                <h4 className='fw-bold'>Edit auction</h4>
-                <Form onSubmit={onSubmit} >
-                    <Controller
-                        control={control}
-                        name="title"
-                        render={({ field }) => (
-                            <Form.Group className="mb-3">
-                                <FormLabel htmlFor="title">Title</FormLabel>
+        <>
+            <h4 className='fw-bold'>Edit auction</h4>
+            <Form onSubmit={onSubmit} >
+                <Form.Group className="mb-3">
+                    <div className="image-upload-container">
+                        {!file && (
+                            <label htmlFor="image" className="add-image-button">
                                 <input
-                                    {...field}
-                                    type="text"
-                                    aria-label="Title"
-                                    aria-describedby="title"
-                                    className={
-                                        errors.title ? 'form-control is-invalid form-rounded' : 'form-control form-rounded'
-                                    }
+                                    type="file"
+                                    id="image"
+                                    accept="image/*"
+                                    onChange={handleFileChange}
+                                    style={{ display: 'none' }}
                                 />
-                                {errors.title && (
-                                    <div className="invalid-feedback text-danger">
-                                        {errors.title.message}
-                                    </div>
-                                )}
-                            </Form.Group>
+                                <div className='btn-add-img'>Add Image</div>
+                            </label>
                         )}
-                    />
-                    <Controller
-                        control={control}
-                        name="description"
-                        render={({ field }) => (
-                            <Form.Group className="mb-3">
-                                <FormLabel htmlFor="description">Description</FormLabel>
-                                <textarea
-                                    {...field}
-                                    rows={4}
-                                    aria-label="Description"
-                                    aria-describedby="description"
-                                    className={
-                                        errors.description ? 'form-control is-invalid form-rounded' : 'form-control form-rounded'
-                                    }
-                                />
-                                {errors.description && (
-                                    <div className="invalid-feedback text-danger">
-                                        {errors.description.message}
-                                    </div>
-                                )}
-                            </Form.Group>
+                        {file && (
+                            <div className="selected-image-container">
+                                <img src={URL.createObjectURL(file)} alt="Selected" />
+                                <Button onClick={handleRemoveImage} className='rounded-btn'>
+                                    <svg xmlns="http://www.w3.org/2000/svg" width="16" height="16" fill="currentColor" className="bi bi-trash" viewBox="0 0 16 16">
+                                        <path d="M5.5 5.5A.5.5 0 0 1 6 6v6a.5.5 0 0 1-1 0V6a.5.5 0 0 1 .5-.5m2.5 0a.5.5 0 0 1 .5.5v6a.5.5 0 0 1-1 0V6a.5.5 0 0 1 .5-.5m3 .5a.5.5 0 0 0-1 0v6a.5.5 0 0 0 1 0z" />
+                                        <path d="M14.5 3a1 1 0 0 1-1 1H13v9a2 2 0 0 1-2 2H5a2 2 0 0 1-2-2V4h-.5a1 1 0 0 1-1-1V2a1 1 0 0 1 1-1H6a1 1 0 0 1 1-1h2a1 1 0 0 1 1 1h3.5a1 1 0 0 1 1 1zM4.118 4 4 4.059V13a1 1 0 0 0 1 1h6a1 1 0 0 0 1-1V4.059L11.882 4zM2.5 3h11V2h-11z" />
+                                    </svg>
+                                </Button>
+                            </div>
                         )}
-                    />
-                    <Controller
-                        control={control}
-                        name="end_date"
-                        render={({ field }) => (
-                            <Form.Group className="mb-3">
-                                <FormLabel htmlFor="end_date">End date</FormLabel>
-                                <DatePicker
-                                    {...field}
-                                    selected={new Date(field.value)}
-                                    onChange={(date: Date | null) => field.onChange(date)}
-                                    className={errors.end_date ? 'form-control is-invalid form-rounded' : 'form-control form-rounded'}
-                                    showTimeSelect
-                                    dateFormat="yyyy-MM-dd'T'HH:mm:ss.SSS'Z'"
-
-                                />
-                                {errors.end_date && (
-                                    <div className="invalid-feedback text-danger">
-                                        {errors.end_date.message}
-                                    </div>
-                                )}
-                            </Form.Group>
-                        )}
-                    />
-
-                    <div className='d-flex justify-content-end mt-3'>
-                        <Button className="rounded-btn light-gray me-2" onClick={handleClose}>Discard changes</Button>
-                        <Button className="rounded-btn" type="submit"> Edit auction </Button>
                     </div>
-                </Form>
-            </Modal.Body>
+                </Form.Group>
+                <Controller
+                    control={control}
+                    name="title"
+                    render={({ field }) => (
+                        <Form.Group className="mb-3">
+                            <FormLabel htmlFor="title">Title</FormLabel>
+                            <input
+                                {...field}
+                                type="text"
+                                aria-label="Title"
+                                aria-describedby="title"
+                                className={
+                                    errors.title ? 'form-control is-invalid form-rounded' : 'form-control form-rounded'
+                                }
+                            />
+                            {errors.title && (
+                                <div className="invalid-feedback text-danger">
+                                    {errors.title.message}
+                                </div>
+                            )}
+                        </Form.Group>
+                    )}
+                />
+                <Controller
+                    control={control}
+                    name="description"
+                    render={({ field }) => (
+                        <Form.Group className="mb-3">
+                            <FormLabel htmlFor="description">Description</FormLabel>
+                            <textarea
+                                {...field}
+                                rows={4}
+                                aria-label="Description"
+                                aria-describedby="description"
+                                className={
+                                    errors.description ? 'form-control is-invalid form-rounded' : 'form-control form-rounded'
+                                }
+                            />
+                            {errors.description && (
+                                <div className="invalid-feedback text-danger">
+                                    {errors.description.message}
+                                </div>
+                            )}
+                        </Form.Group>
+                    )}
+                />
+                <Controller
+                    control={control}
+                    name="end_date"
+                    render={({ field }) => (
+                        <Form.Group className="mb-3">
+                            <FormLabel htmlFor="end_date">End date</FormLabel>
+                            <DatePicker
+                                {...field}
+                                selected={new Date(field.value)}
+                                onChange={(date: Date | null) => field.onChange(date)}
+                                className={errors.end_date ? 'form-control is-invalid form-rounded' : 'form-control form-rounded'}
+                                showTimeSelect
+                                dateFormat="yyyy-MM-dd'T'HH:mm:ss.SSS'Z'"
+
+                            />
+                            {errors.end_date && (
+                                <div className="invalid-feedback text-danger">
+                                    {errors.end_date.message}
+                                </div>
+                            )}
+                        </Form.Group>
+                    )}
+                />
+
+                <div className='d-flex justify-content-end mt-3'>
+                    <Button className="rounded-btn light-gray me-2" onClick={handleCloseModal}>Discard changes</Button>
+                    <Button className="rounded-btn" type="submit"> Edit auction </Button>
+                </div>
+            </Form>
             {showError && (
                 <ToastContainer className="p-3" position="top-end">
                     <Toast onClose={() => setShowError(false)} show={showError}>
@@ -179,7 +216,8 @@ const UpdateItemForm: FC<Props> = ({ defaultValues, userId, show, handleClose })
                     </Toast>
                 </ToastContainer>
             )}
-        </Modal>
+        </>
+
     )
 }
 
