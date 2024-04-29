@@ -17,7 +17,7 @@ const Bidding: FC = () => {
             refetchOnWindowFocus: false,
         },
     )
-    console.log(data?.data)
+
     return (
         <div>
             <div className="p-2 mb-4">
