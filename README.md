@@ -1,4 +1,3 @@
-```markdown
 # AuctionBay Frontend
 
 Welcome to the AuctionBay frontend repository! This repository contains the frontend codebase for the AuctionBay web application, built using ReactJS.
