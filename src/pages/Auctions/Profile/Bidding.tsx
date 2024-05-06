@@ -2,7 +2,6 @@ import { FC } from 'react'
 import { useQuery } from 'react-query'
 import * as API from 'api/Api'
 import authStore from 'stores/auth.store'
-import { ItemTypeId } from 'models/itemId'
 import ItemCard from 'components/item/ItemCard'
 
 

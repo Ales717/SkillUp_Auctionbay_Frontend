@@ -29,8 +29,6 @@ const CreateItemForm: FC<Props> = ({ defaultValues, show, handleClose, currentUs
     const navigate = useNavigate()
 
     const [file, setFile] = useState<File | null>(null)
-    const [fileError, setFileError] = useState(false)
-    const currrentDate = new Date()
 
     const onSubmit = handleSubmit(async (data: CreateUpdateItemFields) => {
         if (currentUserId) {

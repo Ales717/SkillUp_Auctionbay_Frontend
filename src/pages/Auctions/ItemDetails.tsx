@@ -2,7 +2,7 @@ import Layout from 'components/ui/Layout'
 import { useQuery } from 'react-query'
 import { useParams } from 'react-router-dom'
 import * as API from 'api/Api'
-import { Badge } from 'react-bootstrap'
+import { Badge, Toast, ToastContainer } from 'react-bootstrap'
 import Form from 'react-bootstrap/Form'
 import Button from 'react-bootstrap/Button'
 import { BidType, BidTypeId } from 'models/bid'
@@ -25,11 +25,11 @@ const ItemDetails: FC<Props> = ({ defaultValues }) => {
     const currentDate = new Date()
     const formattedDate = currentDate?.toISOString().slice(0, -1)
 
-    const { data, isLoading } = useQuery(
+    const { data } = useQuery(
         ['findOne', id],
         () => API.findOne(id || ''),
     )
-    const { data: bidData, isLoading: bidIsLoading, refetch } = useQuery(
+    const { data: bidData, refetch } = useQuery(
         ['itemBids', id],
         () => API.itemBids(id || ''),
     )
@@ -209,6 +209,16 @@ const ItemDetails: FC<Props> = ({ defaultValues }) => {
                     </div>
                 </div>
             </div>
+            {showError && (
+                <ToastContainer className="p-3" position="top-end">
+                    <Toast onClose={() => setShowError(false)} show={showError}>
+                        <Toast.Header>
+                            <strong className="me-suto text-danger">Error</strong>
+                        </Toast.Header>
+                        <Toast.Body className="text-danger bg-light">{apiError}</Toast.Body>
+                    </Toast>
+                </ToastContainer>
+            )}
         </Layout>
 
     )

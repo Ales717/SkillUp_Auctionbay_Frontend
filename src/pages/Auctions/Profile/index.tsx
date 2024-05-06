@@ -11,7 +11,7 @@ import Won from './Won'
 
 const Profile = () => {
     const { userId } = useParams<{ userId?: string }>()
-    const { data, isLoading } = useQuery(
+    const { data } = useQuery(
         ['getUser', userId],
         () => API.getUser(userId || ''),
     )
